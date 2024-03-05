@@ -95,7 +95,7 @@ printIntLn:
 	ret
 
 ;---------------strInput(cadena)
-; imprime cadena en pantalla, la cadena se recibe en eax
+; imprime cadena en pantalla
 ; la cadena que se recibe en un numero  
 strInput:
 	push	edx
@@ -104,7 +104,7 @@ strInput:
 	push	eax
 
         mov	edx, 20		; edx = espacio de memoria para lectura
-	mov	ecx, nombre	; ecx = direccion de memoria para almacenar
+	mov	ecx, ebx	; ecx = direccion de memoria para almacenar
 	mov	ebx, 0		; leer desde STDIN (teclado)
 	mov	eax, 3		; servicio SYS_READ (sistema de lectura)
 	int	80h
@@ -114,6 +114,69 @@ strInput:
 	pop	ecx
 	pop	edx
 	ret
+
+;------------------upCase(cadena)
+; Convierte la cadena en mayuscula
+upCase:
+
+	UCCicle:
+		mov 	al, [esi]
+		cmp 	al, 0
+		je 	finStr
+		cmp 	al, 'a'
+		jl 	noMinus
+
+		cmp 	al, 'z'
+		jg 	noMinus
+
+		jmp	Minus
+
+	noMinus:
+		mov	[edi], al
+		inc	edi
+		jmp	nextUCh
+
+	Minus:
+		sub	al, 32
+		mov	[edi], al
+		inc	edi
+	nextUCh:
+		inc	esi
+		jmp	UCCicle
+
+;-------------------loCase(cadena)
+; Convierte la cadena en minuscula
+loCase:
+
+	LCCicle:
+		mov	al, [esi]
+		cmp	al, 0
+		je	finStr
+		cmp	al, 'A'
+		jl	noMayus
+		cmp	al, 'Z'
+		jg	noMayus
+		jmp	Mayus
+
+	noMayus:
+		mov 	[edi], al
+		inc	edi
+		jmp	nextLCh
+
+	Mayus:
+		add	al, 32
+		mov	[edi], al
+		inc	edi
+
+	nextLCh:
+		inc	esi
+		jmp	LCCicle
+
+;------------finStr
+; Retorno de funcion
+finStr:
+	ret
+
 
 ;--------------Quit
 ; cerre del programa
