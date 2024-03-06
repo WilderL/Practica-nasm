@@ -107,7 +107,7 @@ printIntLn:
 	push	eax
 	push	ecx
 	push	ebx
-	ca
+	
 	mov	ebx, 10		; Division by 10
 	xor     ecx, ecx	; Clear ebx (division count)
 	call	divideNumber
