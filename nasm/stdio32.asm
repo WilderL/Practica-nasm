@@ -206,6 +206,24 @@ loCase:
 finStr:
 	ret
 
+;---------------------------Invertir cadena----------------
+strInvert:
+	start:
+		call	strLen
+		add	esi, ebx
+		jmp 	ciclo
+
+	ciclo:
+		mov	al, [esi]
+		cmp	al, 0
+		je	finStr
+		jmp	get
+	
+	get:
+		mov	[edi], al
+		dec	esi
+		inc	edi
+		jmp	ciclo
 
 ;--------------Quit
 ; cerre del programa

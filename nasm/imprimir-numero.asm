@@ -5,10 +5,8 @@
 %include 'stdio32.asm'
 
 SECTION .data
-	msg	db	'El numero es: ', 0
-
-SECTION .bss
-	numero	resb	20
+	msg	db	'printIntLn: ', 0
+	msg1	db	'printInt: ', 0
 
 SECTION .text
         global _start
@@ -17,6 +15,12 @@ _start:
 	mov	eax, msg
 	call	strPrint
 
-	mov	eax, 1542
+	mov	eax, 2678
         call    printIntLn
+
+	mov	eax, msg1
+	call	strPrint
+
+	mov	eax, 2000
+	call	printInt
         call    Quit
