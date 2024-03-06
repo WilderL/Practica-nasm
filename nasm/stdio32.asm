@@ -41,6 +41,7 @@ strPrint:
 
 	ret
 
+
 ;----------------strPrintLn(cadena)
 ; imprime cadena en pantalla, la cadena se recibe en eax 
 ; y agrega salto de linea en la impresion 
@@ -55,48 +56,76 @@ strPrintLn:
 	pop	eax
 	ret
 
+;---------------------------------imprimir numero------------------------------
+;----------------divideNumber(cadena)
+; operacion para obtener el entero de cada digito
+divideNumber:
+	inc     ecx			; Division count++
+        xor     edx, edx                ; Clear edx before division
+        idiv    ebx                     ; eax = quotient, edx = remainder
+        push    edx                     ; Send edx to stack
+        cmp     eax, 0                  ; Compare quotient with 0
+        jne     divideNumber            ; If quotient is not 0, divide again
 
-;----------------divisor(cadena)
-; operacion para obtener el entero del numero
-divisor:
-	
+juntarDigito:
+	cmp	ecx, 0
+	jz	fin
+	dec     ecx                     ; Division count--
+        pop     edx                     ; Get digit
+        add     edx, 48                 ; Convert number to ASCII
+        push    edx                     ; Push ASCII
+        mov     eax, esp                ; Get memory direction of ASCII
+        call    strPrint
+        pop     eax                     ; Pop ASCII
+        xor     eax, eax
+        jmp 	juntarDigito
+
+fin:
+	ret
 
 ;---------------printInt(cadena en numero)
 ; imprime cadena en pantalla, la cadena se recibe en eax 
 printInt:
         push    eax
         push    ecx
+        push    ebx
 
-        add     eax, 48         ; Convertir el numero a ASCII
-        push    eax             ; Colocar contenido de eax en la pila
-        mov     eax, esp        ; eax apunta a la cabeza de la pila
-        call    strPrint
+        mov     ebx, 10         ; Division by 10
+        xor     ecx, ecx        ; Clear ebx (division count)
+        call    divideNumber
+        call    juntarDigito
 
-        pop     eax
+        pop     ebx
         pop     ecx
         pop     eax
         ret
 
-;---------------printIntLn(cadena en numero)
-; imprime cadena en pantalla, la cadena se recibe en eax
-; y agrega salto de linea en la impresion 
+;-------------printIntLn(numero)
+; Imprime el numero en pantalla
+; el entero se recibe en eax
 printIntLn:
 	push	eax
 	push	ecx
-
-	add 	eax, 48		; Convertir el numero a ASCII
-	push	eax		; Colocar contenido de eax en la pila
-	mov	eax, esp	; eax apunta a la cabeza de la pila
-	call	strPrintLn
-
+	push	ebx
+	ca
+	mov	ebx, 10		; Division by 10
+	xor     ecx, ecx	; Clear ebx (division count)
+	call	divideNumber
+	call	juntarDigito
+	mov	eax, 0Ah
+	push	eax
+	mov	eax, esp
+	call	strPrint
 	pop	eax
+
+	pop	ebx
 	pop	ecx
 	pop	eax
 	ret
-
+	
+;---------------------------------Lectura del teclado------------------
 ;---------------strInput(cadena)
-; imprime cadena en pantalla
-; la cadena que se recibe en un numero  
+; captura el input de cadena del teclado
 strInput:
 	push	edx
 	push	ecx
