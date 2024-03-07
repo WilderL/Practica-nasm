@@ -210,7 +210,7 @@ finStr:
 strInvert:
 	start:
 		call	strLen
-		add	esi, ebx
+		add	esi, eax
 		jmp 	ciclo
 
 	ciclo:

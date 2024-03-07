@@ -20,7 +20,6 @@ _start:
 	mov	eax, cadena
 	mov	esi, cadena
 	mov	edi, cadenaInvert
-	mov	ebx, cadena
 	call	strInput
 
 	mov	eax, cadena
