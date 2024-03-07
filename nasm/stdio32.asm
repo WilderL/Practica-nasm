@@ -104,25 +104,19 @@ printInt:
 ; Imprime el numero en pantalla
 ; el entero se recibe en eax
 printIntLn:
+	call	printInt
+
 	push	eax
-	push	ecx
-	push	ebx
-	
-	mov	ebx, 10		; Division by 10
-	xor     ecx, ecx	; Clear ebx (division count)
-	call	divideNumber
-	call	juntarDigito
+
 	mov	eax, 0Ah
 	push	eax
 	mov	eax, esp
 	call	strPrint
-	pop	eax
 
-	pop	ebx
-	pop	ecx
+	pop	eax
 	pop	eax
 	ret
-	
+
 ;---------------------------------Lectura del teclado------------------
 ;---------------strInput(cadena)
 ; captura el input de cadena del teclado
