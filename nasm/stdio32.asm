@@ -204,6 +204,7 @@ finStr:
 strInvert:
 	start:
 		call	strLen
+		call	strPrint
 		add	esi, eax
 		jmp 	ciclo
 
