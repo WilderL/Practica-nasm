@@ -204,14 +204,15 @@ finStr:
 strInvert:
 	start:
 		call	strLen
-		call	strPrint
+		call	printIntLn
 		add	esi, eax
 		jmp 	ciclo
 
 	ciclo:
 		mov	al, [esi]
-		cmp	al, 0
+		cmp	eax, 0
 		je	finStr
+		dec	eax
 		jmp	get
 	
 	get:
@@ -219,6 +220,20 @@ strInvert:
 		dec	esi
 		inc	edi
 		jmp	ciclo
+
+;----------strLen2(cadena)
+; Longitud de cadena y devuelve en eax
+strLen2:
+	xor     ecx, ecx
+CicloLen:
+    	cmp     byte [esi + ecx], 0
+    	je      returnLen
+    	inc     ecx
+    	jmp     CicloLen
+
+returnLen:
+    	mov     eax, ecx
+    	ret
 
 ;--------------Quit
 ; cerre del programa
