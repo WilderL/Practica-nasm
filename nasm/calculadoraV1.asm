@@ -28,34 +28,34 @@ _start:
 	cmp	ecx, 1h
 	jle	pedir			; ecx <= 1
 	pop	eax
-	mov	esi, eax
-	mov	edi, num
-	call	strInt
-	mov	eax, edx
+	pop eax
+	call	convertdecimal
+	mov	ecx, eax		;primer numero
 	
-	pop	ebx
-	mov	esi, ebx
-	call	strInt
-	mov	ebx, edx
+	pop	eax
+	call	convertdecimal
+	mov	edx, eax		;segundo numero
 
 	jmp	calcular
 
 pedir:
-	mov	eax, msg
+	mov	eax, msg		;pide el primer numero
 	call	strPrint
 	mov	ebx, numero1
 	call	strInput
 	mov	esi, numero1
-	call	strInt
-	mov	eax, edx
+	mov	eax, numero1
+	call	convertdecimal
+	mov	ecx, eax
 
-	mov	eax, msg1
+	mov	eax, msg1		;pide el segundo numero
 	call	strPrint
 	mov	ebx, numero2
 	call	strInput
 	mov	esi, numero2
-	call	strInt
-	mov	ebx, edx
+	mov	eax, numero2
+	call	convertdecimal
+	mov	edx, eax
 
 	mov	eax, msg2
 	call	strPrint
@@ -63,49 +63,30 @@ pedir:
 	call	strInput 
 	jmp 	operar
 
-;-------------------strInt(cadena)
-; convierte un stra a int, ingresa por esi
-; retorna en edx
-strInt:
-	push	eax
-	push	ebx
-	push	ecx
+;calculadoraV1
+;./calculadoraV1 1 2
+;./calculadoraV1
+;	primer
+;	segundo
+;	operador
 
-	xor	ecx, ecx
-	xor	edx, edx
-	mov	ebx, 1
+;calculadoraV2
+;./calculadoraV2 2 3 +
+;:5
 
-	SIciclo:
-		mov	al, [esi]
-		cmp	al, 10h
-		je	unirNumber
-		mov	[edi], al
-		mov	eax, edi
-		call	strPrintLn
-		push	edi
-		inc	ecx
-		inc	esi
+;calculadoraV3 (rpm)
+;/rpm
+;:5
+;:2
+;:/
+;:15
+;:2 3 + *
+;:q
 
-		jmp	ciclo
+;/rpm 5 3 + 8 *
+;:64
 
-	;----------el valor lo guarda en edx
-	unirNumber:
-		mov	eax, esp
-		sub	eax, 48
-		imul	eax, ebx	; eax = eax * resgistro
-		add	edx, eax
-		dec	ecx
-		cmp	ecx, 0
-		imul	ebx, 10
-		pop	eax
-		jne	unirNumber
-		jmp	finSI
-
-	finSI:
-		pop	ecx
-		pop	ebx
-		pop	eax
-		ret
+;/rpm listado.txt respuesta.txt
 
 calcular:
 	call	suma
@@ -128,29 +109,49 @@ operar:
 	call	Quit
 
 suma:
+	push	ecx
+	push	edx
 	mov	eax, msg3
 	call	strPrint
-	add	eax, ebx
+	add	ecx, edx
+	mov	eax, ecx
 	call	printIntLn
+	pop	edx
+	pop	ecx
 	ret
 
 resta:
+	push	ecx
+	push	edx
 	mov	eax, msg4
 	call	strPrint
-	sub	eax, ebx
+	sub	ecx, edx
+	mov	eax, ecx
 	call	printIntLn
+	pop	edx
+	pop	ecx
 	ret
 
 multi:
+	push	ecx
+	push	edx
 	mov	eax, msg5
 	call	strPrint
-	imul	eax, ebx
+	imul	ecx, edx
+	mov	eax, ecx
 	call	printIntLn
+	pop	edx
+	pop	ecx
 	ret
 
 divi:
-	mov	eax, msg6
-	call	strPrint
-	idiv	ebx
+	push	ecx		;primer numero
+	push	edx		;segundo numero
+	mov	eax, msg6	
+	call	strPrint	; mostrar msg de la division:
+	mov	eax, ecx
+	idiv	edx		;eax = eax/registro entera   ebx = sobrante
 	call	printIntLn
+	pop	edx
+	pop	ecx
 	ret
